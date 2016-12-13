@@ -15,7 +15,7 @@
     <input type="range" name="blur" min="0" max="25" value="10" data-sizing="px">
 
     <label for="base">Base Color</label>
-    <input type="color" name="base" value="#ffc600">
+    <input type="color" name="base" value="#3b9bd5">
   </div>
 
   <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500">
@@ -23,8 +23,23 @@
   <style>
 
     /*
-      misc styles, nothing to do with CSS variables
+      root variables are named according to element name for easy updating
     */
+    :root {
+      --base: #3b9bd5;
+      --spacing: 10px;
+      --blur: 10px;
+    }
+
+    img {
+      padding: var(--spacing);
+      background: var(--base);
+      filter: blur(var(--blur));
+    }
+
+    .hl {
+      color: var(--base);
+    }
 
     body {
       text-align: center;
@@ -50,9 +65,23 @@
     input {
       width:100px;
     }
-  </style>
 
+  </style>
   <script>
+
+  function handleUpdate() {
+    //this.dataset gets all the custom data attributes ex. data-poop
+    const suffix = this.dataset.sizing || ''; //capture 'px' or leave empty if undefined
+    document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix); //set css variables
+    console.log(this.name);
+    console.log(this.suffix);
+  }
+
+  const inputs = document.querySelectorAll('.controls input'); //select all elements with a class of control > inputs
+
+  inputs.forEach(input => input.addEventListener('change', handleUpdate)) //click and let go action
+  inputs.forEach(input => input.addEventListener('mousemove', handleUpdate)) //mouse scroll action
+
   </script>
 
 </body>
